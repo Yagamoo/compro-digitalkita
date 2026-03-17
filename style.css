@@ -35,7 +35,7 @@ h3,
   -webkit-font-smoothing: antialiased;
 }
 
-/* NOISE TEXTURE OVERLAY */
+/* NOISE TEXTURE */
 body::before {
   content: "";
   position: fixed;
@@ -46,7 +46,7 @@ body::before {
   pointer-events: none;
 }
 
-/* GRID PATTERN BG */
+/* GRID BG */
 .grid-bg {
   background-image:
     linear-gradient(rgba(245, 158, 11, 0.04) 1px, transparent 1px),
@@ -54,7 +54,7 @@ body::before {
   background-size: 60px 60px;
 }
 
-/* NAVBAR */
+/* ─── NAVBAR ─── */
 nav {
   position: fixed;
   top: 0;
@@ -118,7 +118,82 @@ nav {
   transform: scale(1.03);
 }
 
-/* HERO */
+/* HAMBURGER */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 200;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* MOBILE MENU */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  background: rgba(10, 10, 10, 0.98);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  padding: 0.5rem 0 1rem;
+}
+.mobile-menu.open {
+  display: flex;
+}
+.mobile-menu a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.85rem 2rem;
+  border-bottom: 1px solid var(--border);
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+.mobile-menu a:hover {
+  color: var(--orange);
+  background: rgba(245, 158, 11, 0.04);
+}
+.mobile-menu a:last-child {
+  border-bottom: none;
+}
+.mobile-menu .mobile-cta {
+  margin: 0.75rem 2rem 0;
+  background: var(--orange);
+  color: #111 !important;
+  font-weight: 700;
+  font-family: "Syne", sans-serif;
+  border-radius: 999px;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+}
+.mobile-menu .mobile-cta:hover {
+  opacity: 0.9;
+  background: var(--orange) !important;
+}
+
+/* ─── HERO ─── */
 #hero {
   min-height: 100vh;
   display: flex;
@@ -201,6 +276,8 @@ nav {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  border: none;
+  cursor: pointer;
 }
 .btn-primary:hover {
   transform: translateY(-2px);
@@ -227,8 +304,6 @@ nav {
   gap: 2rem;
   margin-top: 2.5rem;
 }
-.stat-item {
-}
 .stat-num {
   font-family: "Syne", sans-serif;
   font-size: 1.75rem;
@@ -250,7 +325,6 @@ nav {
   border: 1px solid var(--border);
   border-radius: 16px;
   overflow: hidden;
-  position: relative;
 }
 .hero-card-header {
   background: var(--bg3);
@@ -283,9 +357,6 @@ nav {
 }
 .mock-bar.w50 {
   width: 50%;
-}
-.mock-bar.w65 {
-  width: 65%;
 }
 .mock-grid {
   display: grid;
@@ -326,7 +397,7 @@ nav {
   font-family: "Syne", sans-serif;
 }
 
-/* SECTION BASE */
+/* ─── SECTION BASE ─── */
 section {
   padding: 100px 2rem;
   position: relative;
@@ -358,7 +429,7 @@ section {
   max-width: 520px;
 }
 
-/* ABOUT / KEUNGGULAN */
+/* ─── ABOUT ─── */
 #about {
   background: var(--bg2);
 }
@@ -415,7 +486,7 @@ section {
   line-height: 1.6;
 }
 
-/* LAYANAN */
+/* ─── LAYANAN ─── */
 #services {
   background: var(--bg);
 }
@@ -488,7 +559,7 @@ section {
   color: var(--muted);
 }
 
-/* PORTFOLIO */
+/* ─── PORTFOLIO ─── */
 #portfolio {
   background: var(--bg2);
 }
@@ -574,7 +645,40 @@ section {
   color: var(--muted);
 }
 
-/* TESTIMONIAL */
+/* ─── BUKTI NYATA ─── */
+#bukti {
+  background: var(--bg);
+}
+.bukti-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+.bukti-banner {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.08),
+    rgba(245, 158, 11, 0.03)
+  );
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+/* Bukti cards pakai testi-card tapi tanpa quote decoration */
+.bukti-grid .testi-card {
+  text-align: center;
+}
+.bukti-grid .testi-card::before {
+  display: none;
+}
+
+/* ─── TESTIMONI ─── */
 #testimonial {
   background: var(--bg);
   border-top: 1px solid var(--border);
@@ -583,7 +687,7 @@ section {
 }
 .testi-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
   margin-top: 3rem;
 }
@@ -645,7 +749,7 @@ section {
   color: var(--muted);
 }
 
-/* CTA / KONTAK */
+/* ─── KONTAK ─── */
 #contact {
   background: var(--bg2);
 }
@@ -656,8 +760,6 @@ section {
   grid-template-columns: 1fr 1fr;
   gap: 5rem;
   align-items: start;
-}
-.contact-info {
 }
 .contact-info .section-title {
   margin-bottom: 1rem;
@@ -676,8 +778,6 @@ section {
 }
 .bullet-icon {
   font-size: 1.1rem;
-}
-.contact-form {
 }
 .form-group {
   margin-bottom: 1.25rem;
@@ -747,7 +847,7 @@ section {
   transform: translateY(-2px);
 }
 
-/* FOOTER */
+/* ─── FOOTER ─── */
 footer {
   background: var(--bg);
   border-top: 1px solid var(--border);
@@ -788,7 +888,7 @@ footer {
   color: var(--muted);
 }
 
-/* SCROLL REVEAL */
+/* ─── SCROLL REVEAL ─── */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -801,8 +901,15 @@ footer {
   transform: translateY(0);
 }
 
-/* MOBILE */
+/* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
+  .nav-links,
+  .nav-cta {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
   .hero-inner {
     grid-template-columns: 1fr;
   }
@@ -828,12 +935,40 @@ footer {
   .form-row {
     grid-template-columns: 1fr;
   }
-  .nav-links {
-    display: none;
+  .bukti-grid {
+    grid-template-columns: 1fr;
+  }
+  .bukti-banner {
+    padding: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bukti-banner .btn-primary {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
   }
 }
 @media (max-width: 480px) {
+  section {
+    padding: 70px 1.25rem;
+  }
   .features-grid {
     grid-template-columns: 1fr;
+  }
+  .testi-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-title {
+    font-size: 2.4rem;
+  }
+  .hero-stats {
+    gap: 1.25rem;
+  }
+  .stat-num {
+    font-size: 1.4rem;
+  }
+  .nav-inner {
+    padding: 0 1.25rem;
   }
 }
