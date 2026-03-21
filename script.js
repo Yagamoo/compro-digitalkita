@@ -16,20 +16,6 @@ window.addEventListener('scroll', () => {
     ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.07)';
 });
 
-// ============================================================
-// KONFIGURASI — isi setelah daftar di emailjs.com
-// ============================================================
-const EMAILJS_PUBLIC_KEY  = 'oNx0tQjL4OSp0R98g';
-const EMAILJS_SERVICE_ID  = 'service_716k9bm';
-const EMAILJS_TEMPLATE_ID = 'template_ex6zim9';
-const WA_NUMBER = '6281775432385';
-// ============================================================
-
-// Inisialisasi EmailJS
-(function(){
-  if(typeof emailjs !== 'undefined') emailjs.init(EMAILJS_PUBLIC_KEY);
-})();
-
 function showMsg(text, isError) {
   const msg = document.getElementById('form-msg');
   msg.style.display = 'block';
@@ -39,71 +25,49 @@ function showMsg(text, isError) {
   msg.textContent = text;
 }
 
-function submitForm() {
-  const nama    = document.getElementById('f-nama').value.trim();
-  const wa      = document.getElementById('f-wa').value.trim();
-  const email   = document.getElementById('f-email').value.trim();
-  const layanan = document.getElementById('f-layanan').value;
-  const pesan   = document.getElementById('f-pesan').value.trim();
-  const btn     = document.getElementById('submit-btn');
+async function submitForm() {
+  const nama   = document.getElementById('f-nama').value.trim();
+  const wa     = document.getElementById('f-wa').value.trim();
+  const email  = document.getElementById('f-email').value.trim();
+  const layanan= document.getElementById('f-layanan').value;
+  const pesan  = document.getElementById('f-pesan').value.trim();
+  const btn    = document.getElementById('submit-btn');
 
-  // Validasi field wajib
   if (!nama) { showMsg('⚠️ Nama kamu wajib diisi.', true); return; }
   if (!wa)   { showMsg('⚠️ Nomor WhatsApp wajib diisi.', true); return; }
   if (!pesan){ showMsg('⚠️ Ceritakan dulu proyekmu ya!', true); return; }
 
-  // --- 1. Kirim ke WhatsApp ---
+  // Kirim ke WhatsApp
   const waText = encodeURIComponent(
-    `Halo DigitalKita! 👋
-
-` +
-    `*Nama:* ${nama}
-` +
-    `*WA:* ${wa}
-` +
-    `*Email:* ${email || '-'}
-` +
-    `*Layanan:* ${layanan || 'Belum dipilih'}
-
-` +
-    `*Pesan:*
-${pesan}
-
-` +
-    `_Dikirim dari website digitalkita_`
+    `Halo DigitalKita! 👋\n\n*Nama:* ${nama}\n*WA:* ${wa}\n*Email:* ${email||'-'}\n*Layanan:* ${layanan||'Belum dipilih'}\n\n*Pesan:*\n${pesan}\n\n_Dikirim dari website digitalkita_`
   );
-  window.open(`https://wa.me/${WA_NUMBER}?text=${waText}`, '_blank');
+  window.open(`https://wa.me/6281775432385?text=${waText}`, '_blank');
 
-  // --- 2. Kirim email via EmailJS (jika sudah dikonfigurasi) ---
-  if (EMAILJS_PUBLIC_KEY !== 'GANTI_DENGAN_PUBLIC_KEY_KAMU' && typeof emailjs !== 'undefined') {
-    btn.textContent = 'Mengirim...';
-    btn.style.opacity = '0.7';
-    btn.disabled = true;
+  // Kirim ke email via Formspree (ganti YOUR_FORM_ID)
+  btn.textContent = 'Mengirim...';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
 
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      from_name:  nama,
-      from_wa:    wa,
-      from_email: email || '-',
-      layanan:    layanan || 'Belum dipilih',
-      message:    pesan,
-    })
-    .then(() => {
+  try {
+    const res = await fetch('https://formspree.io/f/xyknazpw', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ nama, wa, email, layanan, pesan })
+    });
+
+    if (res.ok) {
       showMsg('✅ Pesan terkirim ke WA & email! Kami akan balas segera.', false);
-      // Reset form
       ['f-nama','f-wa','f-email','f-pesan'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('f-layanan').selectedIndex = 0;
-    })
-    .catch(() => {
-      showMsg('✅ WA terkirim! (Email gagal — cek konfigurasi EmailJS)', false);
-    })
-    .finally(() => {
-      btn.textContent = 'Kirim Pesan →';
-      btn.style.opacity = '1';
-      btn.disabled = false;
-    });
-  } else {
-    // EmailJS belum dikonfigurasi, cukup WA saja
-    showMsg('✅ Membuka WhatsApp... Pesanmu sudah terformat otomatis!', false);
+    } else {
+      showMsg('✅ WA terkirim! Tapi email gagal, coba lagi.', false);
+    }
+  } catch {
+    showMsg('✅ WA terkirim! Tapi email gagal, cek koneksi.', false);
+  } finally {
+    btn.textContent = 'Kirim Pesan →';
+    btn.style.opacity = '1';
+    btn.disabled = false;
   }
 }
 
